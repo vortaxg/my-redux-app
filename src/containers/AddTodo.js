@@ -1,34 +1,39 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { addTodo } from '../actions'
+import React, { Component } from 'react';
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { addTodo } from '../actions';
 
-let AddTodo = ({ dispatch }) => {
-  let input
-
-  return (
-    <div>
-      <form
-        onSubmit={e => {
-          e.preventDefault()
-          if (!input.value.trim()) {
-            return
-          }
-          dispatch(addTodo(input.value))
-          input.value = ''
-        }}
-      >
-        <input
-          ref={node => {
-            input = node
-          }}
-        />
-        <button type="submit">
-          Add Todo
+class AddTodo extends Component {
+  render() {
+    let input;
+    return (
+      <div>
+        <form
+          onSubmit={e => {
+            e.preventDefault()
+            if (!input.value.trim()) {
+              return
+            }
+            this.props.addTodo(input.value)
+            input.value = ''
+          }} >
+          <input
+            ref={node => {
+              input = node
+            }}
+          />
+          <button type="submit">
+            Add Todo
         </button>
-      </form>
-    </div>
-  )
+        </form>
+      </div>
+    );
+  }
 }
-AddTodo = connect()(AddTodo)
 
-export default AddTodo
+const mapDispatchToProps = (dispatch) =>{
+  return{
+    addTodo :bindActionCreators(addTodo, dispatch)
+  }
+}
+export default connect(null, mapDispatchToProps)(AddTodo)
